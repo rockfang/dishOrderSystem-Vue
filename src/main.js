@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 import Start from "./components/Start.vue"
 import Cart from "./components/Cart.vue"
 import Hot from "./components/Hot.vue"
-import Index from "./components/Index.vue"
+import Home from "./components/Home.vue"
 import Order from "./components/Order.vue"
 import OrderPay from "./components/OrderPay.vue"
 import PContent from "./components/PContent.vue"
@@ -18,12 +18,12 @@ const routes = [
   { path: '/start', component: Start },
   { path: '/cart', component: Cart },
   { path: '/hot', component: Hot },
-  { path: '/index', component: Index },
+  { path: '/home', component: Home },
   { path: '/order', component: Order },
   { path: '/orderpay', component: OrderPay },
   { path: '/pcontent', component: PContent },
   { path: '/search', component: Search },
-  { path: '/*', component: Index }
+  { path: '/*', component: Start }
 ];
 //3创建router实例
 const router = new VueRouter({

@@ -1,0 +1,192 @@
+<template>
+  <div>
+    <div class="pcontent">
+      <div class="info">
+        <img src="../assets/images/product.jpg" alt="预览图" class="pre-img">
+        <h2 class="product-name">爆炒腰花</h2>
+        <p class="product-price">22.00/份</p>
+      </div>
+
+      <div class="detail">
+        <h3 class="detail-name">商品详情</h3>
+        <div class="detal-con">
+          <img src="../assets/images/product.jpg" alt="大图" class="detail-img">
+          <br/>
+          <p>
+            韩国辣酱海鲜炒面,青椒炒牛肉,芦笋腰果炒虾仁,『家常料理』简单又好吃的辣炒起司年糕鸡排
+          </p>
+
+          <br/>
+          <p>
+            韩国辣酱海鲜炒面,青椒炒牛肉,芦笋腰果炒虾仁,『家常料理』简单又好吃的辣炒起司年糕鸡排
+          </p>
+          <br/>
+          <br/>
+          <br/>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pfooter">
+      <div class="pfooter-left">
+        <strong class="pfooter-amount-name">数量:</strong>
+        <div class="amount-opration-con">
+          <button class="minus">-</button>
+          <input type="text" class="amount" readonly="readonly" value="1" name="num" id="num" placeholder=""/>
+          <button class="add">+</button>
+        </div>
+      </div>
+      <button class="pfooter-right" @click="plusCart()">
+        加入购物车
+      </button>
+    </div>
+
+    <div class="pheader-back" @click="back()">
+      返回
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        msg: '详情页面'
+      }
+    },methods: {
+      back: function () {
+        this.$router.go(-1);
+      },plusCart:function () {
+        this.$router.push({path: 'home'})
+      }
+    }
+  }
+
+</script>
+<style lang="scss">
+  .pcontent {
+    .info {
+      background-color: white;
+
+      img {
+        width: 100%;
+        height: 18rem;
+      }
+
+      h2 {
+        padding: .2rem 0 0 .5rem;
+      }
+
+      p {
+        padding: .2rem 0 0 .5rem;
+        color: red;
+      }
+    }
+
+    .detail {
+      background-color: white;
+      padding: .5rem;
+      .detail-name {
+      }
+      .detal-con {
+
+        padding: .4rem;
+        img {
+          width: 100%;
+          margin: 0 auto;
+          height: 25rem;
+        }
+      }
+    }
+  }
+  /**
+    底部添加购物车栏
+   */
+  .pfooter {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4.4rem;
+    line-height: 4.4rem;
+    background-color: white;
+    border-top: 1px solid #eee;
+
+    .pfooter-left {
+      display: flex;
+      float: left;
+      .pfooter-amount-name {
+        flex: 1;
+        font-size: 1.6rem;
+        padding: 0 .5rem;
+      }
+      .amount-opration-con {
+        display: flex;
+        align-items: center;
+        width: 10rem;
+        .minus,.add{
+          flex: 1;
+          width: 2.8rem;
+          height: 2.8rem;
+          color: red;
+          font-size: 2.4rem;
+          background-color: white;
+          border: 1px solid #eee;
+
+        }
+
+        input {
+          flex: 1;
+          display: block;
+          width: 2.8rem;
+          height: 2.8rem;
+          text-align: center;
+          border: none;
+          border-bottom: 1px solid #eee;
+          border-top: 1px solid #eee;
+        }
+
+      }
+    }
+
+    .pfooter-right {
+      float: right;
+      padding:  0 .5rem;
+      height: 3rem;
+      margin: .7rem .5rem 0 0;
+      color: white;
+      background-color: red;
+      border: none;
+      border-radius: .5rem;
+    }
+  }
+  //顶部返回按钮
+  .pheader-back {
+    position: fixed;
+    left: .5rem;
+    top: .5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    line-height: 4.5rem;
+    //css3 before伪类
+    &:before {
+      content: "";
+      display: block;
+      width: .8rem;
+      height: .8rem;
+      float: left;
+      border-bottom: .2rem solid white;
+      border-left: .2rem solid white;
+      position: relative;
+      top: 1.8rem;
+      left: 1rem;
+      transform: rotate(45deg);
+    }
+  }
+
+</style>
