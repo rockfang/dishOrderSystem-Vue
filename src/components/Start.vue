@@ -36,29 +36,6 @@
         msg: '我是开始页面'
       }
     }, mounted() {
-      let defaultFlag = true;
-      let navList = document.getElementById("nav-list");
-      navList.style.transform = 'translate(-100%,0)';
-
-      let menuIcon = document.getElementById("menu-icon");
-      menuIcon.style.transform = 'translate(-6rem,0)';
-
-      let blurBg = document.getElementById("blur-bg");
-
-      blurBg.onclick = menuIcon.onclick = function () {
-        if (defaultFlag) {
-          navList.style.transform = 'translate(0,0)';
-          menuIcon.style.transform = 'translate(0,0)';
-          blurBg.style.display = "block";
-
-
-        } else {
-          navList.style.transform = 'translate(-100%,0)';
-          menuIcon.style.transform = 'translate(-6rem,0)';
-          blurBg.style.display = "none";
-        }
-        defaultFlag = !defaultFlag;
-      }
     }
   }
 </script>

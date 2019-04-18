@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+import VueResource from 'vue-resource'
+Vue.use(VueResource);
 //0 引用并use VueRouter
 import VueRouter from 'vue-router'
 Vue.use(VueRouter);

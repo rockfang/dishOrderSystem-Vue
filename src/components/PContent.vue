@@ -2,28 +2,17 @@
   <div>
     <div class="pcontent">
       <div class="info">
-        <img src="../assets/images/product.jpg" alt="预览图" class="pre-img">
-        <h2 class="product-name">爆炒腰花</h2>
-        <p class="product-price">22.00/份</p>
+        <img :src="baseUrl + '/' + contentData.img_url" alt="预览图" class="pre-img">
+        <h2 class="product-name">{{contentData.title}}</h2>
+        <p class="product-price">{{contentData.price}}元/份</p>
       </div>
 
       <div class="detail">
         <h3 class="detail-name">商品详情</h3>
         <div class="detal-con">
-          <img src="../assets/images/product.jpg" alt="大图" class="detail-img">
+          <img :src="baseUrl + '/' + contentData.img_url" alt="大图" class="detail-img">
           <br/>
-          <p>
-            韩国辣酱海鲜炒面,青椒炒牛肉,芦笋腰果炒虾仁,『家常料理』简单又好吃的辣炒起司年糕鸡排
-          </p>
-
-          <br/>
-          <p>
-            韩国辣酱海鲜炒面,青椒炒牛肉,芦笋腰果炒虾仁,『家常料理』简单又好吃的辣炒起司年糕鸡排
-          </p>
-          <br/>
-          <br/>
-          <br/>
-
+          <div class="detail-desc" v-html="contentData.content"></div>
         </div>
       </div>
 
@@ -49,17 +38,41 @@
   </div>
 </template>
 <script>
+  import globalUrl from '../module/Config.js'
+
   export default {
     data() {
       return {
-        msg: '详情页面'
+        baseUrl: globalUrl.basic_url,
+        contentUrl: globalUrl.basic_url + '/api/productcontent?id=',
+        contentData: ''
       }
     },methods: {
+      requestPContent: function(id) {
+        this.$http.get(this.contentUrl + id).then(response => {
+          this.contentData = response.body.result[0];
+        }, response => {
+          // error callback
+          console.log('result-------------------');
+          console.log('error');
+
+        });
+
+        this.$http.get(this.contentUrl).then(response =>{
+
+        }, response =>{
+
+        });
+      },
       back: function () {
         this.$router.go(-1);
       },plusCart:function () {
         this.$router.push({path: 'home'})
       }
+    },mounted() {
+      //get传值
+      let id = this.$route.query.id;
+      this.requestPContent(id);
     }
   }
 
@@ -86,7 +99,7 @@
 
     .detail {
       background-color: white;
-      padding: .5rem;
+      padding: .5rem .5rem 4.5rem .5rem;
       .detail-name {
       }
       .detal-con {
