@@ -23,7 +23,7 @@
         <strong class="pfooter-amount-name">数量:</strong>
         <div class="amount-opration-con">
           <button class="minus">-</button>
-          <input type="text" class="amount" readonly="readonly" value="1" name="num" id="num" placeholder=""/>
+          <input type="text" class="amount" readonly="readonly" name="num" id="num" placeholder="" v-model="productNum"/>
           <button class="add">+</button>
         </div>
       </div>
@@ -45,7 +45,9 @@
       return {
         baseUrl: globalUrl.basic_url,
         contentUrl: globalUrl.basic_url + '/api/productcontent?id=',
-        contentData: ''
+        addCartUrl: globalUrl.basic_url + '/api/addcart',
+        contentData: '',
+        productNum: 1
       }
     },methods: {
       requestPContent: function(id) {
@@ -57,16 +59,31 @@
           console.log('error');
 
         });
-
-        this.$http.get(this.contentUrl).then(response =>{
-
-        }, response =>{
-
-        });
       },
       back: function () {
         this.$router.go(-1);
       },plusCart:function () {
+        //把菜加入购物车，上传桌号，菜名，数量
+        let requestBody = {
+          uid: 'a110',
+          title: this.contentData.title,
+          product_id: this.$route.query.id,
+          img_url: this.contentData.img_url,
+          price: this.contentData.price,
+          num: this.productNum,
+          open_id: ''
+        };
+        // POST /someUrl  http://a.itying.com/api/addcart
+        this.$http.post(this.addCartUrl, requestBody).then(response => {
+          // get body data
+          this.someData = response.body;
+          console.log(response.body);
+
+        }, response => {
+          // error callback
+        });
+
+
         this.$router.push({path: 'home'})
       }
     },mounted() {

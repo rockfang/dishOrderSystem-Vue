@@ -40,9 +40,12 @@
     <div class="blur-bg" id="blur-bg"></div>
 
     <v-footer-nav></v-footer-nav>
-    <div class="cart-btn">
+    <div class="cart-btn" @click="goCart()">
       <img src="../assets/images/cart.png" alt="购物车图标">
-      <p>已点</p>
+      <p>购物车</p>
+      <div class="dish-num" v-if="dishNum && dishNum > 0">
+        {{dishNum}}
+      </div>
     </div>
   </div>
 </template>
@@ -55,8 +58,10 @@
       return {
         baseUrl: globalUrl.basic_url,
         homeUrl: globalUrl.basic_url + '/api/productlist',
+        cartNumUrl: globalUrl.basic_url + '/api/cartCount?uid=',
         homeData: '',
-        showLeftSlide: false
+        showLeftSlide: false,
+        dishNum: 0
       }
     },methods: {
       clickProductItem: function (id) {
@@ -103,9 +108,10 @@
       },
       resuestHomeData: function () {
         // GET /someUrl
+        let self = this;
         this.$http.get(this.homeUrl).then(response => {
-          this.homeData = response.body;
-          console.log(this.homeData);
+          self.homeData = response.body;
+          console.log(self.homeData);
 
         }, response => {
           // error callback
@@ -113,10 +119,30 @@
           console.log('error');
 
         });
-      }
+      },
+     requestCartNum: function () {
+       //http://a.itying.com/api/cartCount?uid=A001
+       let deskNum = 'a110';
+       this.$http.get(this.cartNumUrl + deskNum).then(response => {
+         console.log(response.body);
+         let resultData = response.body;
+         if (resultData.success && resultData.result > 0) {
+           this.dishNum = resultData.result;
+         } else {
+           this.dishNum = 0;
+         }
+       }, response => {
+
+       });
+     },
+     goCart: function () {
+       // this.$router.push({path:'pcontent',query: {'id': id}});
+       this.$router.push({path:'cart'});
+     }
     },mounted() {
       this.initLeftSlide();
       this.resuestHomeData();
+      this.requestCartNum();
     },components: {
       "v-footer-nav": FooterNav
     }
@@ -228,26 +254,5 @@
     left: 0;
     display: none;
   }
-
-  .cart-btn {
-    position: fixed;
-    width: 5rem;
-    height: 5rem;
-    right: 2rem;
-    bottom: 2rem;
-    background-color: red;
-    border-radius: 50%;
-    text-align: center;
-    img {
-      width: 2.5rem;
-      height: 2.5rem;
-      margin-top: .5rem;
-    }
-    p {
-      margin-top: -0.2rem;
-      color: white;
-    }
-  }
-
 
 </style>

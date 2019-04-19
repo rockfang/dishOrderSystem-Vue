@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="nav-btn" @click="showNav = !showNav">
+    <div class="footer-nav-btn" @click="showNav = !showNav">
       <img src="../../assets/images/navigation.png" alt="导航图标">
       <p>导航</p>
     </div>
@@ -43,18 +43,18 @@
 </script>
 
 <style lang="scss">
-  .nav-btn {
+  .footer-nav-btn {
     position: fixed;
-    width: 5rem;
-    height: 5rem;
+    width: 4.5rem;
+    height: 4.5rem;
     left: 2rem;
     bottom: 2rem;
     background-color: #141615;
     border-radius: 50%;
     text-align: center;
     img {
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 2rem;
+      height: 2rem;
       margin-top: .5rem;
     }
     p {
@@ -70,16 +70,17 @@
     height: 100%;
     background-color: rgba(0,0,0,0.4);
     li {
-      width: 5rem;
-      height: 5rem;
+      width: 4.5rem;
+      height: 4.5rem;
       background-color: #141615;
       border-radius: 50%;
       position: absolute;
+      text-align: center;
 
       img {
-        width: 1.8rem;
-        height: 1.8rem;
-        margin: .8rem 0 0 1.5rem;
+        width: 2rem;
+        height: 2em;
+        margin-top: .5rem;
       }
       p {
         margin-top: -.2rem;

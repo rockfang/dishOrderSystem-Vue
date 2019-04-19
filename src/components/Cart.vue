@@ -75,10 +75,7 @@
       </div>
     </div>
 
-    <div class="nav-btn">
-      <img src="../assets/images/navigation.png" alt="">
-      <p>导航</p>
-    </div>
+    <v-footer-nav></v-footer-nav>
 
     <div class="book-btn">
       <img src="../assets/images/book.png" alt="">
@@ -141,11 +138,16 @@
 </template>
 
 <script>
+  import FooterNav from './common/FooterNav.vue'
+  import globalUrl from '../module/Config.js'
+
   export default {
     data() {
       return {
         msg: '购物车页面'
       }
+    },components: {
+      "v-footer-nav": FooterNav
     }
   }
 </script>
@@ -252,7 +254,6 @@
   }
 
   .nav-btn {
-    display: none;
     position: fixed;
     width: 4.5rem;
     height: 4.5rem;
@@ -272,49 +273,6 @@
     }
   }
 
-  .book-btn {
-    display: none;
-    position: fixed;
-    width: 4.5rem;
-    height: 4.5rem;
-    left: 50%;
-    margin-left: -2.25rem;
-    bottom: 1rem;
-    border-radius: 50%;
-    background-color: #2e2e2e;
-    text-align: center;
-    img {
-      width: 2rem;
-      height: 2rem;
-      margin-top: .3rem;
-    }
-    p {
-      color: white;
-      margin-top: -.2rem;
-    }
-  }
-  .cart-btn {
-    display: none;
-    position: fixed;
-    width: 4.5rem;
-    height: 4.5rem;
-    right: 1rem;
-    bottom: 1rem;
-    border-radius: 50%;
-    background-color: red;
-    text-align: center;
-
-    img {
-      width: 2rem;
-      height: 2rem;
-      margin-top: .3rem;
-    }
-
-    p {
-      color: white;
-      margin-top: -.2rem;
-    }
-  }
   .customs-favors {
     background-color: white;
     border-radius: 1rem;

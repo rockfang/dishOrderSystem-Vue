@@ -142,48 +142,4 @@
     margin-top: -.2rem;
   }
 }
-
-.book-btn {
-  position: fixed;
-  width: 4.5rem;
-  height: 4.5rem;
-  left: 50%;
-  margin-left: -2.25rem;
-  bottom: 1rem;
-  border-radius: 50%;
-  background-color: #2e2e2e;
-  text-align: center;
-
-  img {
-    width: 2rem;
-    height: 2rem;
-    margin-top: .3rem;
-  }
-
-  p {
-    color: white;
-    margin-top: -.2rem;
-  }
-}
-
-.cart-btn {
-  position: fixed;
-  width: 4.5rem;
-  height: 4.5rem;
-  right: 1rem;
-  bottom: 1rem;
-  border-radius: 50%;
-  background-color: red;
-  text-align: center;
-
-  img {
-    width: 2rem;
-    height: 2rem;
-    margin-top: .3rem;
-  }
-
-  p {
-    color: white;
-    margin-top: -.2rem;
-  }
-}</style>
+</style>
