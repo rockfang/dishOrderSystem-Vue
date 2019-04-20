@@ -28,3 +28,55 @@ strong {
     height: 0;
     clear: both;
 }
+//继续点餐
+.book-btn {
+  position: fixed;
+  width: 4.5rem;
+  height: 4.5rem;
+  left: 50%;
+  margin-left: -2.25rem;
+  bottom: 2rem;
+  border-radius: 50%;
+  background-color: #141615;
+  text-align: center;
+  img {
+    width: 2rem;
+    height: 2rem;
+    margin-top: .3rem;
+  }
+  p {
+    color: white;
+    margin-top: -.2rem;
+  }
+}
+//购物车
+.cart-btn {
+  position: fixed;
+  width: 4.5rem;
+  height: 4.5rem;
+  right: 2rem;
+  bottom: 2rem;
+  background-color: red;
+  border-radius: 50%;
+  text-align: center;
+  img {
+    width: 2rem;
+    height: 2rem;
+    margin-top: .3rem;
+  }
+  p {
+    margin-top: -0.2rem;
+    color: white;
+  }
+
+  .dish-num {
+    position: absolute;
+    top: -.8rem;
+    right: -.8rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: red;
+    color: white
+  }
+}
