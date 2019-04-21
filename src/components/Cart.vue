@@ -5,8 +5,9 @@
         <h2>购物车</h2>
         <div class="p-number">
           <div class="p-number-left">
-            <p class="p-number-persons">用餐人数：2人</p>
-            <p class="p-number-remark">备注：无</p>
+            <p class="p-number-persons">用餐人数：{{pNum}}</p>
+            <p class="p-number-remark" v-if="pMark">备注：{{pMark}}</p>
+            <p class="p-number-remark" v-else>备注：无</p>
           </div>
 
           <div class="p-number-right">
@@ -15,8 +16,8 @@
           </div>
         </div>
         <div class="cart-p-number">
-          <div class="tips-about-all-dishes">您的购物车有：小炒2个，精品小菜2个</div>
-          <div class="total-price">合计：<span>￥58元</span></div>
+          <div class="tips-about-all-dishes">您的购物车有{{dishNum}}个菜</div>
+          <div class="total-price">合计：<span>￥{{totalPrice}}元</span></div>
         </div>
       </div>
       <div class="cart-list">
@@ -36,8 +37,6 @@
       </div>
     </div>
 
-    <v-footer-nav></v-footer-nav>
-
     <div class="book-btn">
       <img src="../assets/images/book.png" alt="">
       <p>菜单</p>
@@ -47,6 +46,8 @@
       <img src="../assets/images/doorder.png" alt="">
       <p>下单</p>
     </div>
+    <v-footer-nav></v-footer-nav>
+
 
     <div class="customs-favors">
       <h3>本店顾客最常点的菜</h3>
@@ -106,25 +107,52 @@
     data() {
       return {
         baseUrl: globalUrl.basic_url,
-        cartData: ''
+        cartData: '',
+        pNum: '',
+        pMark: '',
+        dishNum: '',
+        totalPrice: ''
       }
     },components: {
       "v-footer-nav": FooterNav
     },methods: {
       initCartData: function () {
-        //get or post ?
         let initUrl = this.baseUrl + '/api/cartlist?uid=' + 'a110'
         this.$http.get(initUrl).then(response => {
           console.log('initCartData:' + JSON.stringify(response.body));
           if (response.body.success) {
             this.cartData = response.body.result;
             console.log('initCartData:' + this.cartData);
-
+            this.computeTotalResult();
           }
         },response => {
 
         });
 
+      },
+      initPeopleInfo: function () {
+        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + 'a110'
+        this.$http.get(pInfoUrl).then(response => {
+          console.log('pInfoUrl:' + JSON.stringify(response.body));
+          if (response.body.success) {
+            this.pNum = response.body.result[0].p_num;
+            this.pMark = response.body.result[0].p_mark;
+          }
+        },response => {
+
+        });
+
+      },
+      computeTotalResult: function() {
+        let length = this.cartData.length;
+        let dishNum = 0;
+        let totalPrice = 0;
+        for(let i=0; i < length; i++) {
+          dishNum += this.cartData[i].num;
+          totalPrice += parseFloat(this.cartData[i].price * this.cartData[i].num);
+        }
+        this.dishNum = dishNum;
+        this.totalPrice = totalPrice;
       },
       minusItem: function (dish,index) {
 
@@ -142,6 +170,7 @@
             if (dish.num == 0) {
               this.cartData.splice(index,1);
             }
+            this.computeTotalResult();
           }
         },response => {
 
@@ -161,12 +190,15 @@
           if (response.body.success) {
             ++dish.num;
           }
+          this.computeTotalResult();
+
         },response => {
 
         });
       }
     },mounted() {
       this.initCartData();
+      this.initPeopleInfo();
     }
   }
 </script>

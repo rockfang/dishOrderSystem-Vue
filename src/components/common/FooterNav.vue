@@ -100,11 +100,13 @@
       }
       &:nth-child(3) {
         bottom: 13%;
-        left: 40%;
+        left: 37%;
       }
       &:nth-child(4) {
-        bottom: 2%;
-        left: 45%;
+
+        left: 50%;
+        margin-left: -2.25rem;
+        bottom: 2rem;
       }
       &:nth-child(5) {
         bottom: 2rem;

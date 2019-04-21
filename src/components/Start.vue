@@ -33,22 +33,22 @@
       <li><span>不要辣</span></li>
     </ul>
 
-    <router-link to="/home">
-      <div class="start"><span>开始点餐</span></div>
-    </router-link>
+    <div class="start" @click="startOrder()"><span>开始点餐</span></div>
   </div>
 </template>
 <script>
 
+  import globalUrl from '../module/Config.js'
   export default {
     data() {
       return {
+        saveOrderUrl: globalUrl.basic_url + '/api/addPeopleInfo',
         msg: '我是开始页面',
         pNumber: '1人',
         extraClaim: ''
       }
     },methods: {
-      addEventListener() {
+      addEventListener: function () {
         //为选择人数添加事件
         let self = this;
         let userLis = document.querySelectorAll('.users-list li');
@@ -77,8 +77,21 @@
 
           }
         }
+      },
+      startOrder: function () {
+        this.$http.post(this.saveOrderUrl,{
+          uid: 'a110',//TODO 桌号
+          p_num: this.pNumber,
+          p_mark: this.extraClaim
+        }).then(response => {
+          console.log(JSON.stringify(response.body));
+          this.$router.push('/home');
+        },response => {
+
+        });
       }
     },mounted() {
+
       this.addEventListener();
     }
   }
