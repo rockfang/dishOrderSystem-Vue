@@ -124,7 +124,7 @@
        //http://a.itying.com/api/cartCount?uid=A001
        let deskNum = 'a110';
        this.$http.get(this.cartNumUrl + deskNum).then(response => {
-         console.log(response.body);
+         console.log('cartNum:' + JSON.stringify(response.body));
          let resultData = response.body;
          if (resultData.success && resultData.result > 0) {
            this.dishNum = resultData.result;
@@ -190,6 +190,10 @@
         border-radius: .3rem;
         overflow: hidden;
 
+        a {
+          color: #666;
+          text-decoration: none;
+        }
         img {
           width: 100%;
           height: 6.5rem;

@@ -22,9 +22,9 @@
       <div class="pfooter-left">
         <strong class="pfooter-amount-name">数量:</strong>
         <div class="amount-opration-con">
-          <button class="minus">-</button>
+          <button class="minus" @click="minusProduct()">-</button>
           <input type="text" class="amount" readonly="readonly" name="num" id="num" placeholder="" v-model="productNum"/>
-          <button class="add">+</button>
+          <button class="add" @click="addProduct()">+</button>
         </div>
       </div>
       <button class="pfooter-right" @click="plusCart()">
@@ -85,6 +85,12 @@
 
 
         this.$router.push({path: 'home'})
+      },minusProduct: function () {
+        if (this.productNum > 1) {
+          --this.productNum;
+        }
+      },addProduct: function () {
+        ++this.productNum;
       }
     },mounted() {
       //get传值

@@ -23,6 +23,16 @@
       </ul>
     </div>
 
+    <div class="extra-claim">
+      <input type="text" placeholder="请输入您的口味，忌口等（可以不填写)" v-model="extraClaim">
+    </div>
+
+    <ul class="tips-list">
+      <li><span>不要香菜</span></li>
+      <li><span>一点点辣</span></li>
+      <li><span>不要辣</span></li>
+    </ul>
+
     <router-link to="/home">
       <div class="start"><span>开始点餐</span></div>
     </router-link>
@@ -33,9 +43,43 @@
   export default {
     data() {
       return {
-        msg: '我是开始页面'
+        msg: '我是开始页面',
+        pNumber: '1人',
+        extraClaim: ''
       }
-    }, mounted() {
+    },methods: {
+      addEventListener() {
+        //为选择人数添加事件
+        let self = this;
+        let userLis = document.querySelectorAll('.users-list li');
+        let length = userLis.length;
+        for(let i=0; i < length;i++) {
+          userLis[i].onclick = function () {
+            for (let j = 0; j < length; j++) {
+              userLis[j].className = '';
+            }
+            this.className = 'active';
+            self.pNumber = this.querySelector('span').innerHTML.trim();
+            console.log(self.pNumber);
+          }
+        }
+
+        //为提示要求添加事件
+        let tipsLis = document.querySelectorAll(".tips-list li");
+        let tipsLength = tipsLis.length;
+        for (let i = 0; i < tipsLength; i++) {
+          tipsLis[i].onclick = function () {
+            for (let j = 0; j < tipsLength; j++) {
+              tipsLis[j].className = '';
+            }
+            this.className = 'active';
+            self.extraClaim = self.extraClaim + ' ' + this.querySelector('span').innerHTML.trim()
+
+          }
+        }
+      }
+    },mounted() {
+      this.addEventListener();
     }
   }
 </script>
@@ -64,7 +108,7 @@
     padding-top: 3rem;
   }
 
-  .users-list {
+  .users-list, .tips-list {
     display: flex;
     flex-wrap: wrap;
     padding: .5rem;
@@ -85,8 +129,27 @@
         background-color: #ffffff;
       }
     }
+
+    /*如果点中间没有空格：li.active{color:red;}*/
+    /*是选择类名为 active 的 li 对其生效*/
+    li.active{
+      span{
+        background: red;
+        border: 1px solid red;
+        color:#fff;
+      }
+    }
   }
 
+  .extra-claim {
+    padding: 0 1rem;
+    input {
+      width: 100%;
+      height: 3rem;
+      padding-left: .5rem;
+      box-sizing: border-box;
+    }
+  }
   .start {
     width: 6rem;
     height: 6rem;
@@ -99,13 +162,13 @@
 
     span {
       position: relative;
-      top: 2rem;
+      top: 1.2rem;
       color: white;
       display: block;
       text-align: center;
+      width: 3rem;
       margin: 0 auto;
+
     }
-
-
   }
 </style>

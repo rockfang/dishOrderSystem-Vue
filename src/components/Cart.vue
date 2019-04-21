@@ -20,56 +20,17 @@
         </div>
       </div>
       <div class="cart-list">
-        <div class="item">
-          <img src="../assets/images/1.jpg" alt="" class="picture">
+        <div class="item" v-for="(dish,index) in cartData">
+          <img :src="baseUrl + '/' + dish.img_url" alt="" class="picture">
           <div class="desc">
-            <p>炝炒生菜</p>
-            <p>￥18</p>
+            <p>{{dish.title}}</p>
+            <p>￥{{dish.price}}</p>
           </div>
 
           <div class="operation-number">
-            <div class="minus">-</div>
-            <input type="text" placeholder="" class="number" value="1">
-            <div class="plus">+</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="../assets/images/2.jpg" alt="" class="picture">
-          <div class="desc">
-            <p>炝炒生菜</p>
-            <p>￥18</p>
-          </div>
-
-          <div class="operation-number">
-            <div class="minus">-</div>
-            <input type="text" placeholder="" class="number" value="1">
-            <div class="plus">+</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="../assets/images/3.jpg" alt="" class="picture">
-          <div class="desc">
-            <p>炝炒生菜</p>
-            <p>￥18</p>
-          </div>
-
-          <div class="operation-number">
-            <div class="minus">-</div>
-            <input type="text" placeholder="" class="number" value="1">
-            <div class="plus">+</div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="../assets/images/4.jpg" alt="" class="picture">
-          <div class="desc">
-            <p>炝炒生菜</p>
-            <p>￥18</p>
-          </div>
-
-          <div class="operation-number">
-            <div class="minus">-</div>
-            <input type="text" placeholder="" class="number" value="1">
-            <div class="plus">+</div>
+            <div class="minus" @click="minusItem(dish,index)">-</div>
+            <input type="text" placeholder="" class="number" v-model="dish.num" readonly="readonly">
+            <div class="plus" @click="addItem(dish)">+</div>
           </div>
         </div>
       </div>
@@ -144,10 +105,68 @@
   export default {
     data() {
       return {
-        msg: '购物车页面'
+        baseUrl: globalUrl.basic_url,
+        cartData: ''
       }
     },components: {
       "v-footer-nav": FooterNav
+    },methods: {
+      initCartData: function () {
+        //get or post ?
+        let initUrl = this.baseUrl + '/api/cartlist?uid=' + 'a110'
+        this.$http.get(initUrl).then(response => {
+          console.log('initCartData:' + JSON.stringify(response.body));
+          if (response.body.success) {
+            this.cartData = response.body.result;
+            console.log('initCartData:' + this.cartData);
+
+          }
+        },response => {
+
+        });
+
+      },
+      minusItem: function (dish,index) {
+
+        //http://a.itying.com/api/decCart?uid=a001&product_id=1241241255436246&num=2
+        let minusUrl = this.baseUrl + '/api/decCart?uid=' + 'a110' + '&product_id='
+          + dish.product_id
+          + '&num=' + dish.num;
+        console.log('minusUrl:' + minusUrl);
+
+        this.$http.get(minusUrl).then(response => {
+          console.log('minusResult:' + JSON.stringify(response.body));
+          if (response.body.success) {
+            --dish.num;
+            //删除后如果条目数量为0，则展示数组中删除这条数据
+            if (dish.num == 0) {
+              this.cartData.splice(index,1);
+            }
+          }
+        },response => {
+
+        });
+
+
+      },
+      addItem: function (dish) {
+        //http://a.itying.com/api/incCart?uid=a001&product_id=1241241255436246&num=2
+        let addUrl = this.baseUrl + '/api/incCart?uid=' + 'a110' + '&product_id='
+          + dish.product_id
+          + '&num=' + dish.num;
+        console.log('addUrl:' + addUrl);
+
+        this.$http.get(addUrl).then(response => {
+          console.log('addResult:' + JSON.stringify(response.body));
+          if (response.body.success) {
+            ++dish.num;
+          }
+        },response => {
+
+        });
+      }
+    },mounted() {
+      this.initCartData();
     }
   }
 </script>
