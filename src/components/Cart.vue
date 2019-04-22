@@ -3,7 +3,7 @@
     <div class="cart-content">
       <div class="cart-info">
         <h2>购物车</h2>
-        <div class="p-number">
+        <div class="p-number" v-if="totalPrice != 0">
           <div class="p-number-left">
             <p class="p-number-persons">用餐人数：{{pNum}}</p>
             <p class="p-number-remark" v-if="pMark">备注：{{pMark}}</p>
@@ -12,15 +12,15 @@
 
           <div class="p-number-right">
             <img src="../assets/images/edit.png" alt="" class="p-img-modify">
-            <p class="p-modify">修改</p>
+            <p class="p-modify" @click="modifyPInfo()">修改</p>
           </div>
         </div>
-        <div class="cart-p-number">
+        <div class="cart-p-number" v-if="totalPrice != 0">
           <div class="tips-about-all-dishes">您的购物车有{{dishNum}}个菜</div>
           <div class="total-price">合计：<span>￥{{totalPrice}}元</span></div>
         </div>
       </div>
-      <div class="cart-list">
+      <div class="cart-list" v-if="totalPrice != 0">
         <div class="item" v-for="(dish,index) in cartData">
           <img :src="baseUrl + '/' + dish.img_url" alt="" class="picture">
           <div class="desc">
@@ -36,18 +36,6 @@
         </div>
       </div>
     </div>
-
-    <div class="book-btn">
-      <img src="../assets/images/book.png" alt="">
-      <p>菜单</p>
-    </div>
-
-    <div class="cart-btn">
-      <img src="../assets/images/doorder.png" alt="">
-      <p>下单</p>
-    </div>
-    <v-footer-nav></v-footer-nav>
-
 
     <div class="customs-favors">
       <h3>本店顾客最常点的菜</h3>
@@ -96,6 +84,22 @@
         </ul>
       </div>
     </div>
+    <div class="empty-cart-tips" v-if="totalPrice == 0">购物车空空的</div>
+
+    <router-link to="home">
+      <div class="book-btn">
+        <img src="../assets/images/book.png" alt="">
+        <p>菜单</p>
+      </div>
+    </router-link>
+
+    <div class="cart-btn">
+      <img src="../assets/images/doorder.png" alt="">
+      <p>下单</p>
+    </div>
+    <v-footer-nav></v-footer-nav>
+
+
   </div>
 </template>
 
@@ -110,7 +114,7 @@
         cartData: '',
         pNum: '',
         pMark: '',
-        dishNum: '',
+        dishNum: 0,
         totalPrice: ''
       }
     },components: {
@@ -195,6 +199,9 @@
         },response => {
 
         });
+      },
+      modifyPInfo: function () {
+        this.$router.push({path:'/modifypeopleinfo'})
       }
     },mounted() {
       this.initCartData();
@@ -324,6 +331,9 @@
     }
   }
 
+  .empty-cart-tips {
+    text-align: center;
+  }
   .customs-favors {
     background-color: white;
     border-radius: 1rem;

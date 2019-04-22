@@ -16,6 +16,7 @@ import Order from "./components/Order.vue"
 import OrderPay from "./components/OrderPay.vue"
 import PContent from "./components/PContent.vue"
 import Search from "./components/Search.vue"
+import ModifyPeopleInfo from "./components/ModifyPeopleInfo.vue"
 //2 定义路由
 const routes = [
   { path: '/start', component: Start },
@@ -26,6 +27,7 @@ const routes = [
   { path: '/orderpay', component: OrderPay },
   { path: '/pcontent', component: PContent },
   { path: '/search', component: Search },
+  { path: '/modifypeopleinfo', component: ModifyPeopleInfo },
   { path: '/*', component: Start }
 ];
 //3创建router实例

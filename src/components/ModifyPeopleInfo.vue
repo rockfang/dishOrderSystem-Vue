@@ -1,14 +1,14 @@
 <template>
   <div id="start">
     <div class="start-header">
-      <img src="../assets/images/canju.png" alt="餐具图标"> 用餐人数
+      <img src="../assets/images/canju.png" alt="餐具图标"> 修改用餐信息
     </div>
 
     <div class="notice">请选择正确的用餐人数,小二马上给您送餐</div>
 
     <div class="content">
       <ul class="users-list">
-        <li v-for="people in userList"><span>{{people}}人</span></li>
+        <li v-for="people in userList" :class="{'active':parseFloat(pNumber) == people}"><span>{{people}}人</span></li>
       </ul>
     </div>
 
@@ -22,7 +22,8 @@
       <li><span>不要辣</span></li>
     </ul>
 
-    <div class="start" @click="startOrder()"><span>开始点餐</span></div>
+    <div class="cancel-modify" @click="cancelModify()"><span>取消修改</span></div>
+    <div class="complete-modify" @click="completeModify()"><span>修改完成</span></div>
   </div>
 </template>
 <script>
@@ -31,10 +32,10 @@
   export default {
     data() {
       return {
-        saveOrderUrl: globalUrl.basic_url + '/api/addPeopleInfo',
+        baseUrl: globalUrl.basic_url,
         pNumber: '1人',
+        userList:[],
         extraClaim: '',
-        userList:[]
       }
     },methods: {
       addEventListener: function () {
@@ -67,15 +68,32 @@
           }
         }
       },
-      startOrder: function () {
-        this.$http.post(this.saveOrderUrl,{
+      initPeopleInfo: function () {
+        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + 'a110'
+        this.$http.get(pInfoUrl).then(response => {
+          console.log('pInfoUrl:' + JSON.stringify(response.body));
+          if (response.body.success) {
+            this.pNumber = response.body.result[0].p_num;
+            this.extraClaim = response.body.result[0].p_mark;
+          }
+        },response => {
+
+        });
+
+      },
+      cancelModify: function () {
+        this.$router.push({path:'cart'});
+      },
+      completeModify: function () {
+        console.log('completeModify:' + this.pNumber);
+
+        this.$http.post(this.baseUrl + '/api/addPeopleInfo',{
           uid: 'a110',//TODO 桌号
           p_num: this.pNumber,
           p_mark: this.extraClaim
         }).then(response => {
-          console.log(JSON.stringify(response.body));
-          //this.$router.push('/home');
-          this.$router.push({path:'home'});
+          console.log('completeModify:' + JSON.stringify(response.body));
+          this.$router.push({path:'cart'});
 
         },response => {
 
@@ -85,14 +103,11 @@
       for (let i=0; i < 12; i++) {
         this.userList.push(i+1);
       }
-      //this.addEventListener();
-      //数据没有渲染完成，就去获取dom节点
-
+      this.initPeopleInfo();
       //数据渲染完成再去获取
       this.$nextTick(function () {
         this.addEventListener();
       });
-
     }
   }
 </script>
@@ -163,24 +178,45 @@
       box-sizing: border-box;
     }
   }
-  .start {
-    width: 6rem;
-    height: 6rem;
+
+  .cancel-modify {
+    width: 4.5rem;
+    height: 4.5rem;
     border-radius: 50%;
     background-color: red;
     position: fixed;
-    bottom: 5rem;
-    left: 50%;
-    margin-left: -3rem;
+    bottom: 4rem;
+    left: 15%;
 
     span {
       position: relative;
-      top: 1.5rem;
+      top: .7rem;
       color: white;
       display: block;
       text-align: center;
       width: 2rem;
       margin: 0 auto;
+
+    }
+  }
+  .complete-modify {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background-color: red;
+    position: fixed;
+    bottom: 4rem;
+    right: 15%;
+
+    span {
+      position: relative;
+      top: .7rem;
+      color: white;
+      display: block;
+      text-align: center;
+      width: 2rem;
+      margin: 0 auto;
+
     }
   }
 </style>
