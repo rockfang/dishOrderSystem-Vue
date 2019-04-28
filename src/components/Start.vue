@@ -179,7 +179,7 @@
       color: white;
       display: block;
       text-align: center;
-      width: 2rem;
+      width: 3rem;
       margin: 0 auto;
     }
   }

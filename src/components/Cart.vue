@@ -119,7 +119,15 @@
       }
     },components: {
       "v-footer-nav": FooterNav
-    },methods: {
+    },
+    sockets: {
+      addcart: function(){  /*接受服务器广播过来的addcart*/
+        console.log('Home receive addcart');
+        //更新购物车的数量
+        this.initCartData();
+      }
+    },
+    methods: {
       initCartData: function () {
         let initUrl = this.baseUrl + '/api/cartlist?uid=' + 'a110'
         this.$http.get(initUrl).then(response => {
@@ -169,6 +177,7 @@
         this.$http.get(minusUrl).then(response => {
           console.log('minusResult:' + JSON.stringify(response.body));
           if (response.body.success) {
+            this.$socket.emit('addcart','addcart');
             --dish.num;
             //删除后如果条目数量为0，则展示数组中删除这条数据
             if (dish.num == 0) {
@@ -192,6 +201,7 @@
         this.$http.get(addUrl).then(response => {
           console.log('addResult:' + JSON.stringify(response.body));
           if (response.body.success) {
+            this.$socket.emit('addcart','addcart');
             ++dish.num;
           }
           this.computeTotalResult();

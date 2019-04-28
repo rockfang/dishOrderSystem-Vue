@@ -78,13 +78,15 @@
           // get body data
           this.someData = response.body;
           console.log(response.body);
+          //加入购物车的时候给服务器发消息
+          this.$socket.emit('addcart','addcart');
+          this.$router.push({path: 'home'})
 
         }, response => {
           // error callback
         });
 
 
-        this.$router.push({path: 'home'})
       },minusProduct: function () {
         if (this.productNum > 1) {
           --this.productNum;

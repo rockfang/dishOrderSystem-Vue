@@ -35,9 +35,24 @@ const router = new VueRouter({
   routes // (缩写) 相当于 routes: routes
 });
 
+import VueSocketIO from 'vue-socket.io'
+// Vue.use(VueSocketIO, 'http://a.itying.com?roomid=a003');
+Vue.use(new VueSocketIO({
+  connection: 'http://a.itying.com?roomid=a110'
+}));
+
+
+
+
 
 new Vue({
   el: '#app',
   router,
+  sockets:{  /*测试期间写 也不不写在根里面*/
+    connect: function(){
+      console.log('socket connected')
+    }
+
+  },
   render: h => h(App)
 });

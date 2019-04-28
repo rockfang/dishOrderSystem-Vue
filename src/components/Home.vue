@@ -63,7 +63,15 @@
         showLeftSlide: false,
         dishNum: 0
       }
-    },methods: {
+    },
+   sockets: {
+     addcart: function(){  /*接受服务器广播过来的addcart*/
+       console.log('Home receive addcart');
+       //更新购物车的数量
+       this.requestCartNum();
+     }
+   },
+   methods: {
       clickProductItem: function (id) {
         // 带查询参数，变成 /register?plan=private
         // router.push({ path: 'register', query: { plan: 'private' }})
