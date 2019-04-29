@@ -106,6 +106,7 @@
 <script>
   import FooterNav from './common/FooterNav.vue'
   import globalUrl from '../module/Config.js'
+  import StorageTool from '../module/StorageTool.js'
 
   export default {
     data() {
@@ -115,7 +116,8 @@
         pNum: '',
         pMark: '',
         dishNum: 0,
-        totalPrice: ''
+        totalPrice: '',
+        uid: StorageTool.get('roomid')
       }
     },components: {
       "v-footer-nav": FooterNav
@@ -129,7 +131,8 @@
     },
     methods: {
       initCartData: function () {
-        let initUrl = this.baseUrl + '/api/cartlist?uid=' + 'a110'
+        let initUrl = this.baseUrl + '/api/cartlist?uid=' + StorageTool.get('roomid');
+        console.log("initUrl:"+ initUrl);
         this.$http.get(initUrl).then(response => {
           console.log('initCartData:' + JSON.stringify(response.body));
           if (response.body.success) {
@@ -143,7 +146,7 @@
 
       },
       initPeopleInfo: function () {
-        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + 'a110'
+        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + this.uid
         this.$http.get(pInfoUrl).then(response => {
           console.log('pInfoUrl:' + JSON.stringify(response.body));
           if (response.body.success) {
@@ -169,7 +172,7 @@
       minusItem: function (dish,index) {
 
         //http://a.itying.com/api/decCart?uid=a001&product_id=1241241255436246&num=2
-        let minusUrl = this.baseUrl + '/api/decCart?uid=' + 'a110' + '&product_id='
+        let minusUrl = this.baseUrl + '/api/decCart?uid=' + this.uid + '&product_id='
           + dish.product_id
           + '&num=' + dish.num;
         console.log('minusUrl:' + minusUrl);
@@ -193,7 +196,7 @@
       },
       addItem: function (dish) {
         //http://a.itying.com/api/incCart?uid=a001&product_id=1241241255436246&num=2
-        let addUrl = this.baseUrl + '/api/incCart?uid=' + 'a110' + '&product_id='
+        let addUrl = this.baseUrl + '/api/incCart?uid=' + this.uid + '&product_id='
           + dish.product_id
           + '&num=' + dish.num;
         console.log('addUrl:' + addUrl);

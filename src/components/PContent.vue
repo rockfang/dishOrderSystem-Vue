@@ -39,6 +39,7 @@
 </template>
 <script>
   import globalUrl from '../module/Config.js'
+  import StorageTool from '../module/StorageTool.js'
 
   export default {
     data() {
@@ -47,7 +48,8 @@
         contentUrl: globalUrl.basic_url + '/api/productcontent?id=',
         addCartUrl: globalUrl.basic_url + '/api/addcart',
         contentData: '',
-        productNum: 1
+        productNum: 1,
+        uid: StorageTool.get('roomid')
       }
     },methods: {
       requestPContent: function(id) {
@@ -65,9 +67,9 @@
       },plusCart:function () {
         //把菜加入购物车，上传桌号，菜名，数量
         let requestBody = {
-          uid: 'a110',
+          uid: this.uid,
           title: this.contentData.title,
-          product_id: this.$route.query.id,
+          product_id: this.contentData._id,
           img_url: this.contentData.img_url,
           price: this.contentData.price,
           num: this.productNum,
@@ -79,6 +81,7 @@
           this.someData = response.body;
           console.log(response.body);
           //加入购物车的时候给服务器发消息
+
           this.$socket.emit('addcart','addcart');
           this.$router.push({path: 'home'})
 

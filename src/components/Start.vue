@@ -28,13 +28,15 @@
 <script>
 
   import globalUrl from '../module/Config.js'
+  import StorageTool from '../module/StorageTool.js'
   export default {
     data() {
       return {
         saveOrderUrl: globalUrl.basic_url + '/api/addPeopleInfo',
         pNumber: '1人',
         extraClaim: '',
-        userList:[]
+        userList:[],
+        uid: StorageTool.get('roomid')
       }
     },methods: {
       addEventListener: function () {
@@ -52,8 +54,10 @@
             console.log(self.pNumber);
           }
         }
+        userLis[0].className = 'active';
 
         //为提示要求添加事件
+        document.querySelector('.tips-list')
         let tipsLis = document.querySelectorAll(".tips-list li");
         let tipsLength = tipsLis.length;
         for (let i = 0; i < tipsLength; i++) {
@@ -69,7 +73,7 @@
       },
       startOrder: function () {
         this.$http.post(this.saveOrderUrl,{
-          uid: 'a110',//TODO 桌号
+          uid: this.uid,
           p_num: this.pNumber,
           p_mark: this.extraClaim
         }).then(response => {
@@ -179,7 +183,7 @@
       color: white;
       display: block;
       text-align: center;
-      width: 3rem;
+      width: 2.5rem;
       margin: 0 auto;
     }
   }
