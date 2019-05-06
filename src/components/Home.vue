@@ -34,7 +34,7 @@
       </li>
     </ul>
     <div class="menu" id="menu-icon">
-      <img src="../assets/images/nav.png" alt="菜单图标记">
+      <img src="../assets/images/nav.png" alt="侧拉图标记">
       <p>菜单</p>
     </div>
     <div class="blur-bg" id="blur-bg"></div>
@@ -52,6 +52,7 @@
 <script>
   import FooterNav from './common/FooterNav.vue'
   import globalUrl from '../module/Config.js'
+  import StorageTool from '../module/StorageTool.js'
 
  export default {
     data() {
@@ -61,7 +62,8 @@
         cartNumUrl: globalUrl.basic_url + '/api/cartCount?uid=',
         homeData: '',
         showLeftSlide: false,
-        dishNum: 0
+        dishNum: 0,
+        uid: StorageTool.get('roomid')
       }
     },
    sockets: {
@@ -130,8 +132,7 @@
       },
      requestCartNum: function () {
        //http://a.itying.com/api/cartCount?uid=A001
-       let deskNum = 'a110';
-       this.$http.get(this.cartNumUrl + deskNum).then(response => {
+       this.$http.get(this.cartNumUrl + this.uid).then(response => {
          console.log('cartNum:' + JSON.stringify(response.body));
          let resultData = response.body;
          if (resultData.success && resultData.result > 0) {

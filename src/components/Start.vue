@@ -1,42 +1,56 @@
 <template>
   <div id="start">
-    <div class="start-header">
-      <img src="../assets/images/canju.png" alt="餐具图标"> 用餐人数
+
+    <div class="load-item" v-show="loading">
+      加载中...
     </div>
+    <div v-show="!loading">
+      <div class="start-header">
+        <img src="../assets/images/canju.png" alt="餐具图标"> 用餐人数
+      </div>
 
-    <div class="notice">请选择正确的用餐人数,小二马上给您送餐</div>
+      <div class="notice">请选择正确的用餐人数,小二马上给您送餐</div>
 
-    <div class="content">
-      <ul class="users-list">
-        <li v-for="people in userList"><span>{{people}}人</span></li>
+      <div class="content">
+        <ul class="users-list">
+          <li v-for="people in userList"><span>{{people}}人</span></li>
+        </ul>
+      </div>
+
+      <div class="extra-claim">
+        <input type="text" placeholder="请输入您的口味，忌口等（可以不填写)" v-model="extraClaim">
+      </div>
+
+      <ul class="tips-list">
+        <li><span>不要香菜</span></li>
+        <li><span>一点点辣</span></li>
+        <li><span>不要辣</span></li>
       </ul>
+
+      <div class="start" @click="startOrder()"><span>开始点餐</span></div>
     </div>
 
-    <div class="extra-claim">
-      <input type="text" placeholder="请输入您的口味，忌口等（可以不填写)" v-model="extraClaim">
-    </div>
-
-    <ul class="tips-list">
-      <li><span>不要香菜</span></li>
-      <li><span>一点点辣</span></li>
-      <li><span>不要辣</span></li>
-    </ul>
-
-    <div class="start" @click="startOrder()"><span>开始点餐</span></div>
   </div>
 </template>
 <script>
 
+  /**
+   * 进入Start页面
+   * 页面渲染前请求 获取用餐信息 接口
+   * 有数据则直接跳转Home页
+   */
   import globalUrl from '../module/Config.js'
   import StorageTool from '../module/StorageTool.js'
   export default {
     data() {
       return {
+        baseUrl: globalUrl.basic_url,
         saveOrderUrl: globalUrl.basic_url + '/api/addPeopleInfo',
         pNumber: '1人',
         extraClaim: '',
         userList:[],
-        uid: StorageTool.get('roomid')
+        uid: StorageTool.get('roomid'),
+        loading: true
       }
     },methods: {
       addEventListener: function () {
@@ -84,8 +98,28 @@
         },response => {
 
         });
-      }
-    },mounted() {
+      },
+      initPeopleInfo: function () {
+        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + this.uid;
+        this.$http.get(pInfoUrl).then(response => {
+          console.log('pInfoUrl:' + JSON.stringify(response.body));
+          this.loading = false;
+          if (response.body.success) {
+            if (response.body.result.length != 0) {
+                //不是第一个点餐者
+                this.$router.push('/home');
+            }
+          }
+        },response => {
+
+        });
+
+      },
+    },
+    created() {
+      this.initPeopleInfo();
+    },
+    mounted() {
       for (let i=0; i < 12; i++) {
         this.userList.push(i+1);
       }

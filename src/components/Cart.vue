@@ -93,13 +93,11 @@
       </div>
     </router-link>
 
-    <div class="cart-btn">
+    <div class="cart-btn" @click="orderNow()">
       <img src="../assets/images/doorder.png" alt="">
       <p>下单</p>
     </div>
     <v-footer-nav></v-footer-nav>
-
-
   </div>
 </template>
 
@@ -132,12 +130,10 @@
     methods: {
       initCartData: function () {
         let initUrl = this.baseUrl + '/api/cartlist?uid=' + StorageTool.get('roomid');
-        console.log("initUrl:"+ initUrl);
         this.$http.get(initUrl).then(response => {
-          console.log('initCartData:' + JSON.stringify(response.body));
           if (response.body.success) {
             this.cartData = response.body.result;
-            console.log('initCartData:' + this.cartData);
+            console.log('菜品信息：' + JSON.stringify(this.cartData));
             this.computeTotalResult();
           }
         },response => {
@@ -148,7 +144,6 @@
       initPeopleInfo: function () {
         let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + this.uid
         this.$http.get(pInfoUrl).then(response => {
-          console.log('pInfoUrl:' + JSON.stringify(response.body));
           if (response.body.success) {
             this.pNum = response.body.result[0].p_num;
             this.pMark = response.body.result[0].p_mark;
@@ -175,10 +170,8 @@
         let minusUrl = this.baseUrl + '/api/decCart?uid=' + this.uid + '&product_id='
           + dish.product_id
           + '&num=' + dish.num;
-        console.log('minusUrl:' + minusUrl);
 
         this.$http.get(minusUrl).then(response => {
-          console.log('minusResult:' + JSON.stringify(response.body));
           if (response.body.success) {
             this.$socket.emit('addcart','addcart');
             --dish.num;
@@ -199,10 +192,8 @@
         let addUrl = this.baseUrl + '/api/incCart?uid=' + this.uid + '&product_id='
           + dish.product_id
           + '&num=' + dish.num;
-        console.log('addUrl:' + addUrl);
 
         this.$http.get(addUrl).then(response => {
-          console.log('addResult:' + JSON.stringify(response.body));
           if (response.body.success) {
             this.$socket.emit('addcart','addcart');
             ++dish.num;
@@ -215,6 +206,33 @@
       },
       modifyPInfo: function () {
         this.$router.push({path:'/modifypeopleinfo'})
+      },
+      orderNow: function () {
+        let order = [];
+        for (var i = 0, length = this.cartData.length; i < length; i++) {
+          order.push({
+            title: this.cartData[i].title,
+            price: this.cartData[i].price,
+            num: this.cartData[i].num
+          });
+        }
+        console.log('order:' + JSON.stringify(order));
+
+        this.$http.post(this.baseUrl + '/api/addOrder',{
+          uid: this.uid,
+          p_num: this.pNum,
+          p_mark: this.pMark,
+          total_price: this.totalPrice,
+          total_num: this.dishNum,
+          order: JSON.stringify(order)
+        }).then(response => {
+          console.log('下单结果：'  + JSON.stringify(response.body));
+          if (response.body.success) {
+            this.$router.push('/order');
+          }
+        },response => {
+          // error callback
+        });
       }
     },mounted() {
       this.initCartData();

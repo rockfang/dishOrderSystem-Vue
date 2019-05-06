@@ -4,44 +4,65 @@
       <div class="order-info-top">
         <img src="../assets/images/timer.png" alt="" class="timer">
         <div>
-          <h2>118号桌待门店接单</h2>
+          <h2>{{orderData.uid}}号桌待门店接单</h2>
           <p>请及时联系服务员确认菜品信息</p>
         </div>
       </div>
       <h3 class="order-info-bottom">
-        已点菜品6份，合计：<span>￥60元</span>
+        已点菜品{{orderData.total_num}}份，合计：<span>￥{{orderData.total_price}}元</span>
       </h3>
     </div>
 
     <div class="order-detail">
       <h3>商品详情：</h3>
       <ul>
-        <li>
-          <div class="product-name">烧茄子</div>
-          <div class="product-amount">1份</div>
-          <div class="product-money">12元</div>
-        </li>
-        <li>
-          <div class="product-name">烧茄子</div>
-          <div class="product-amount">1份</div>
-          <div class="product-money">12元</div>
-        </li>
-        <li>
-          <div class="product-name">烧茄子</div>
-          <div class="product-amount">1份</div>
-          <div class="product-money">12元</div>
+        <li v-for="dish in orderData.items">
+          <div class="product-name">{{dish.title}}</div>
+          <div class="product-amount">{{dish.num}}份</div>
+          <div class="product-money">{{dish.price}}元</div>
         </li>
       </ul>
 
     </div>
+
+    <v-footer-nav></v-footer-nav>
+
   </div>
+
 </template>
 <script>
+  import globalUrl from '../module/Config.js'
+  import StorageTool from '../module/StorageTool.js'
+  import FooterNav from './common/FooterNav.vue'
   export default {
     data() {
       return {
-        msg: '等待接单页面'
+        baseUrl: globalUrl.basic_url,
+        uid: StorageTool.get('roomid'),
+        orderData: ''
       }
+    },methods: {
+      getOrderMsg: function () {
+        let orderurl = this.baseUrl + '/api/getOrder?uid=' + this.uid;
+        console.log(orderurl);
+
+        this.$http.get(this.baseUrl + '/api/getOrder', {params: {uid: this.uid}}).then(response => {
+          console.log(JSON.stringify(response.body));
+          if (response.body.success) {
+            this.orderData = response.body.result[0];
+          }
+        }, response => {
+          // error callback
+        });
+
+
+      }
+
+
+    },mounted() {
+      this.getOrderMsg();
+    },components: {
+      "v-footer-nav": FooterNav
     }
   }
 
