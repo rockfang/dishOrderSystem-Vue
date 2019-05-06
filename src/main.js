@@ -41,14 +41,10 @@ Vue.use(new VueSocketIO({
   connection: 'http://a.itying.com?roomid=a110'
 }));
 
-
-
-
-
 new Vue({
   el: '#app',
   router,
-  sockets:{  /*测试期间写 也不不写在根里面*/
+  sockets:{  /*测试期间查看是否连上*/
     connect: function(){
       console.log('socket connected')
     }
@@ -56,3 +52,10 @@ new Vue({
   },
   render: h => h(App)
 });
+
+import StorageTool from './module/StorageTool.js'
+
+let roomid = window.location.hash.split('=')[1];
+if (roomid) {
+  StorageTool.set('roomid', roomid);
+}

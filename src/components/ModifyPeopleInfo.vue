@@ -29,6 +29,8 @@
 <script>
 
   import globalUrl from '../module/Config.js'
+  import StorageTool from '../module/StorageTool.js'
+
   export default {
     data() {
       return {
@@ -36,6 +38,7 @@
         pNumber: '1人',
         userList:[],
         extraClaim: '',
+        uid: StorageTool.get('roomid')
       }
     },methods: {
       addEventListener: function () {
@@ -69,7 +72,7 @@
         }
       },
       initPeopleInfo: function () {
-        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + 'a110'
+        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + this.uid;
         this.$http.get(pInfoUrl).then(response => {
           console.log('pInfoUrl:' + JSON.stringify(response.body));
           if (response.body.success) {
@@ -88,7 +91,7 @@
         console.log('completeModify:' + this.pNumber);
 
         this.$http.post(this.baseUrl + '/api/addPeopleInfo',{
-          uid: 'a110',//TODO 桌号
+          uid: this.uid,
           p_num: this.pNumber,
           p_mark: this.extraClaim
         }).then(response => {
