@@ -32,14 +32,9 @@ const routes = [
 ];
 //3创建router实例
 const router = new VueRouter({
+  mode: 'history',//改为history模式，去掉难看的#号
   routes // (缩写) 相当于 routes: routes
 });
-
-import VueSocketIO from 'vue-socket.io'
-// Vue.use(VueSocketIO, 'http://a.itying.com?roomid=a003');
-Vue.use(new VueSocketIO({
-  connection: 'http://a.itying.com?roomid=a110'
-}));
 
 new Vue({
   el: '#app',
@@ -55,7 +50,16 @@ new Vue({
 
 import StorageTool from './module/StorageTool.js'
 
-let roomid = window.location.hash.split('=')[1];
+// let roomid = window.location.hash.split('=')[1]; //这种方式是route默认hash模式才行，history模式拿不到
+
+import UrlTool from  './module/UrlTool.js'
+let roomid = UrlTool.getQueryString('roomid');
 if (roomid) {
   StorageTool.set('roomid', roomid);
 }
+
+import VueSocketIO from 'vue-socket.io'
+
+Vue.use(new VueSocketIO({
+  connection: 'http://a.itying.com?roomid=' + roomid
+}));

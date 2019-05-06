@@ -71,7 +71,6 @@
         userLis[0].className = 'active';
 
         //为提示要求添加事件
-        document.querySelector('.tips-list')
         let tipsLis = document.querySelectorAll(".tips-list li");
         let tipsLength = tipsLis.length;
         for (let i = 0; i < tipsLength; i++) {
