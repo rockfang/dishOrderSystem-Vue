@@ -3,6 +3,24 @@ import App from './App.vue'
 
 import VueResource from 'vue-resource'
 Vue.use(VueResource);
+
+import StorageTool from './module/StorageTool.js'
+// let roomid = window.location.hash.split('=')[1]; //这种方式是route默认hash模式才行，history模式拿不到
+//把获取roomid放在router配置之前避免在start页面获取localstorage时还没设置值，导致为空
+import UrlTool from  './module/UrlTool.js'
+let roomid = UrlTool.getQueryString('roomid');
+console.log('main.js roomid:' + roomid);
+if (roomid) {
+  StorageTool.set('roomid', roomid);
+}
+
+import VueSocketIO from 'vue-socket.io'
+
+Vue.use(new VueSocketIO({
+  connection: 'http://a.itying.com?roomid=' + roomid
+}));
+
+
 //0 引用并use VueRouter
 import VueRouter from 'vue-router'
 Vue.use(VueRouter);
@@ -48,18 +66,3 @@ new Vue({
   render: h => h(App)
 });
 
-import StorageTool from './module/StorageTool.js'
-
-// let roomid = window.location.hash.split('=')[1]; //这种方式是route默认hash模式才行，history模式拿不到
-
-import UrlTool from  './module/UrlTool.js'
-let roomid = UrlTool.getQueryString('roomid');
-if (roomid) {
-  StorageTool.set('roomid', roomid);
-}
-
-import VueSocketIO from 'vue-socket.io'
-
-Vue.use(new VueSocketIO({
-  connection: 'http://a.itying.com?roomid=' + roomid
-}));

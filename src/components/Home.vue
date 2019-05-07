@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="header-list">
-      <div class="header-item">
+      <div class="header-item" @click="goTitlePage(0)">
         <img src="../assets/images/rexiao.png" alt="">
         <p>热销榜</p>
       </div>
-      <div class="header-item">
+      <div class="header-item" @click="goTitlePage(1)">
         <img src="../assets/images/caidan.png" alt="">
         <p>点过的菜</p>
       </div>
-      <div class="header-item">
+      <div class="header-item" @click="goTitlePage(2)">
         <img src="../assets/images/sousuo.png" alt="">
         <p>搜菜</p>
       </div>
@@ -40,44 +40,37 @@
     <div class="blur-bg" id="blur-bg"></div>
 
     <v-footer-nav></v-footer-nav>
-    <div class="cart-btn" @click="goCart()">
-      <img src="../assets/images/cart.png" alt="购物车图标">
-      <p>购物车</p>
-      <div class="dish-num" v-if="dishNum && dishNum > 0">
-        {{dishNum}}
-      </div>
-    </div>
+    <v-cart-nav></v-cart-nav>
   </div>
 </template>
 <script>
   import FooterNav from './common/FooterNav.vue'
+  import CartNav from './common/CartNav.vue'
   import globalUrl from '../module/Config.js'
-  import StorageTool from '../module/StorageTool.js'
 
- export default {
+  export default {
     data() {
       return {
         baseUrl: globalUrl.basic_url,
         homeUrl: globalUrl.basic_url + '/api/productlist',
-        cartNumUrl: globalUrl.basic_url + '/api/cartCount?uid=',
         homeData: '',
-        showLeftSlide: false,
-        dishNum: 0,
-        uid: StorageTool.get('roomid')
+        showLeftSlide: false
       }
     },
-   sockets: {
-     addcart: function(){  /*接受服务器广播过来的addcart*/
-       console.log('Home receive addcart');
-       //更新购物车的数量
-       this.requestCartNum();
-     }
-   },
-   methods: {
+    methods: {
+      goTitlePage: function (index) {
+        if (index == 0) {
+          this.$router.push('/hot');
+        } else if (index == 1) {
+          alert("功能开发中...");
+        } else if (index == 2) {
+          this.$router.push('/search');
+        }
+      },
       clickProductItem: function (id) {
         // 带查询参数，变成 /register?plan=private
         // router.push({ path: 'register', query: { plan: 'private' }})
-        this.$router.push({path:'pcontent',query: {'id': id}});
+        this.$router.push({path: 'pcontent', query: {'id': id}});
       },
       initLeftSlide: function () {
         let self = this;
@@ -99,7 +92,7 @@
           self.showLeftSlide = !self.showLeftSlide;
         }
       },
-      selectTypeItem: function(index) {
+      selectTypeItem: function (index) {
         console.log("click:" + index);
 
         //侧边栏隐藏
@@ -112,8 +105,8 @@
         this.showLeftSlide = !this.showLeftSlide;
 
         //定位指定类型条目
-        let itemCatesDom=document.querySelectorAll('.group-name');
-        document.documentElement.scrollTop=itemCatesDom[index].offsetTop;
+        let itemCatesDom = document.querySelectorAll('.group-name');
+        document.documentElement.scrollTop = itemCatesDom[index].offsetTop;
 
       },
       resuestHomeData: function () {
@@ -129,31 +122,13 @@
           console.log('error');
 
         });
-      },
-     requestCartNum: function () {
-       //http://a.itying.com/api/cartCount?uid=A001
-       this.$http.get(this.cartNumUrl + this.uid).then(response => {
-         console.log('cartNum:' + JSON.stringify(response.body));
-         let resultData = response.body;
-         if (resultData.success && resultData.result > 0) {
-           this.dishNum = resultData.result;
-         } else {
-           this.dishNum = 0;
-         }
-       }, response => {
-
-       });
-     },
-     goCart: function () {
-       // this.$router.push({path:'pcontent',query: {'id': id}});
-       this.$router.push({path:'cart'});
-     }
-    },mounted() {
+      }
+    }, mounted() {
       this.initLeftSlide();
       this.resuestHomeData();
-      this.requestCartNum();
-    },components: {
-      "v-footer-nav": FooterNav
+    }, components: {
+      "v-footer-nav": FooterNav,
+      "v-cart-nav": CartNav
     }
   }
 
@@ -166,14 +141,17 @@
     background: white;
     display: flex;
     border-radius: 0.3rem;
+
     .header-item {
       width: 33.3%;
       text-align: center;
       padding: .4rem 0;
       border-right: 1px solid #EDEDED;
+
       &:last-child {
         border-right: none;
       }
+
       img {
         width: 2rem;
         height: 2rem;
@@ -185,6 +163,7 @@
     margin: 0 auto;
     text-align: center;
   }
+
   .dish-content {
     width: 96%;
     margin: .5rem auto 0 auto;
@@ -195,6 +174,7 @@
       width: 33.3%;
       padding: .5rem;
       box-sizing: border-box;
+
       .item {
         border-radius: .3rem;
         overflow: hidden;
@@ -203,6 +183,7 @@
           color: #666;
           text-decoration: none;
         }
+
         img {
           width: 100%;
           height: 6.5rem;
@@ -218,24 +199,26 @@
 
   .nav-list {
     position: fixed;
-    transition: all 1s;
-    transform: translate(-100%,0);
+    transition: all .2s;
+    transform: translate(-100%, 0);
     z-index: 3;
     left: 0;
     top: 0;
     width: 6rem;
     height: 100%;
     background-color: #EEEEEE;
+
     li {
       height: 5rem;
       line-height: 5rem;
       text-align: center;
     }
   }
+
   .menu {
     position: fixed;
-    transition: all 1s;
-    transform: translate(-6rem,0);
+    transition: all .2s;
+    transform: translate(-6rem, 0);
     z-index: 2;
     top: 40%;
     left: 4rem;
@@ -257,11 +240,12 @@
       margin-top: -0.5rem;
     }
   }
+
   .blur-bg {
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     z-index: 1;
     top: 0;
     left: 0;

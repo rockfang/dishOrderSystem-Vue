@@ -22,9 +22,9 @@
       </div>
 
       <ul class="tips-list">
-        <li><span>不要香菜</span></li>
-        <li><span>一点点辣</span></li>
-        <li><span>不要辣</span></li>
+        <li @click="beizhu('tips0')" id="tips0"><span>不要香菜</span></li>
+        <li @click="beizhu('tips1')" id="tips1"><span>一点点辣</span></li>
+        <li @click="beizhu('tips2')" id="tips2"><span>不要辣</span></li>
       </ul>
 
       <div class="start" @click="startOrder()"><span>开始点餐</span></div>
@@ -48,6 +48,7 @@
         saveOrderUrl: globalUrl.basic_url + '/api/addPeopleInfo',
         pNumber: '1人',
         extraClaim: '',
+        extraClaimList:[],
         userList:[],
         uid: StorageTool.get('roomid'),
         loading: true
@@ -69,19 +70,28 @@
           }
         }
         userLis[0].className = 'active';
+      },
+      beizhu: function(id) {
 
-        //为提示要求添加事件
-        let tipsLis = document.querySelectorAll(".tips-list li");
-        let tipsLength = tipsLis.length;
-        for (let i = 0; i < tipsLength; i++) {
-          tipsLis[i].onclick = function () {
-            for (let j = 0; j < tipsLength; j++) {
-              tipsLis[j].className = '';
-            }
-            this.className = 'active';
-            self.extraClaim = self.extraClaim + ' ' + this.querySelector('span').innerHTML.trim()
-
-          }
+        //清空输入框
+        this.extraClaim = '';
+        //把选中的文本添加/移除 数组
+        let item = document.getElementById(id);
+        let tips = item.querySelector('span').innerHTML.trim();
+        console.log('tips:' + tips);
+        if (item.className == 'active') {
+          item.className = '';
+          let index = this.extraClaimList.indexOf(tips);
+          this.extraClaimList.splice(index,1)
+        } else {
+          item.className = 'active';
+          this.extraClaimList.push(tips)
+        }
+        console.log(this.extraClaimList);
+        //数组内容重新展示
+        for (let i = 0,length=this.extraClaimList.length; i < length; i ++ ) {
+          this.extraClaim = this.extraClaim + " " + this.extraClaimList[i];
+          console.log(i+ " " + this.extraClaim);
         }
       },
       startOrder: function () {

@@ -93,7 +93,7 @@
       </div>
     </router-link>
 
-    <div class="cart-btn" @click="orderNow()">
+    <div class="cart-btn" @click="orderNow()" v-if="totalPrice != 0">
       <img src="../assets/images/doorder.png" alt="">
       <p>下单</p>
     </div>
@@ -142,7 +142,7 @@
 
       },
       initPeopleInfo: function () {
-        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + this.uid
+        let pInfoUrl = this.baseUrl + '/api/peopleInfoList?uid=' + this.uid;
         this.$http.get(pInfoUrl).then(response => {
           if (response.body.success) {
             this.pNum = response.body.result[0].p_num;

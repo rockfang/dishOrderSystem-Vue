@@ -55,28 +55,31 @@
       </ul>
     </div>
 
-    <div class="nav-btn">
-      <img src="../assets/images/navigation.png" alt="">
-      <p>导航</p>
-    </div>
+    <v-footer-nav></v-footer-nav>
 
-    <div class="book-btn">
-      <img src="../assets/images/book.png" alt="">
-      <p>继续点菜</p>
-    </div>
+    <router-link to="home">
+      <div class="book-btn">
+        <img src="../assets/images/book.png" alt="">
+        <p>继续点菜</p>
+      </div>
+    </router-link>
 
-    <div class="cart-btn">
-      <img src="../assets/images/cart.png" alt="">
-      <p>购物车</p>
-    </div>
+    <v-cart-nav></v-cart-nav>
+
   </div>
 </template>
 <script>
+  import FooterNav from './common/FooterNav.vue'
+  import CartNav from './common/CartNav.vue'
+
   export default {
     data() {
       return {
         msg: '热销榜'
       }
+    },components: {
+      "v-footer-nav": FooterNav,
+      "v-cart-nav": CartNav
     }
   }
 
